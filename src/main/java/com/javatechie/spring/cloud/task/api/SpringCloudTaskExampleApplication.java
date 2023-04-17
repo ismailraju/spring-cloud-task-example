@@ -12,7 +12,7 @@ import org.springframework.cloud.task.repository.TaskExecution;
 
 @SpringBootApplication
 @EnableTask
-public class SpringCloudTaskExampleApplication implements CommandLineRunner {
+public class SpringCloudTaskExampleApplication implements CommandLineRunner ,TaskExecutionListener{
 
 	public static void main(String[] args) {
 		SpringApplication.run(SpringCloudTaskExampleApplication.class, args);
@@ -20,7 +20,7 @@ public class SpringCloudTaskExampleApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		System.out.println("Welcome to " + args[0]);
+		System.out.println("Welcome to " );
 
 	}
 
@@ -45,4 +45,20 @@ public class SpringCloudTaskExampleApplication implements CommandLineRunner {
 
 	}
 
-}
+	@Override
+	public void onTaskStartup(TaskExecution taskExecution) {
+		System.out.println("TaskName : " + taskExecution.getTaskName() + " Execution Id : "
+				+ taskExecution.getExecutionId() + " started...(TaskExecutionListener)");
+	}
+
+	@Override
+	public void onTaskEnd(TaskExecution taskExecution) {
+		System.out.println("TaskName : " + taskExecution.getTaskName() + " Execution Id : "
+				+ taskExecution.getExecutionId() + " completed...(TaskExecutionListener)");
+	}
+
+	@Override
+	public void onTaskFailed(TaskExecution taskExecution, Throwable throwable) {
+		System.out.println("TaskName : " + taskExecution.getTaskName() + " Execution Id : "
+				+ taskExecution.getExecutionId() + " failed...(TaskExecutionListener)");
+	}
